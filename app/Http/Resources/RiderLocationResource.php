@@ -15,8 +15,15 @@ class RiderLocationResource extends JsonResource
     public function toArray($request)
     {
         // return parent::toArray($request);
-        return [
-            'message' => 'Rider location stored successfully'
-        ];
+        if($request){
+            return [
+                'message' => 'Rider location stored successfully'
+            ];
+        }else{
+            return [
+                'message' => 'Somthing went wrong!'
+            ];
+        }
+
     }
 }

@@ -6,15 +6,17 @@ class RiderLocationDTO
 {
     public $rider_id;
     public $service_name;
-    public $lat;
-    public $long;
+    public $latitude;
+    public $longitude;
+    public $timestamp;
 
-    public function __construct($rider_id, $service_name,$lat, $long)
+    public function __construct($rider_id, $service_name,$latitude, $longitude,$timestamp)
     {
         $this->rider_id = $rider_id;
         $this->service_name = $service_name;
-        $this->lat = $lat;
-        $this->long = $long;
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
+        $this->timestamp = $timestamp;
     }
 
     public static function fromApiRequest(RiderLocationRequest $request) : RiderLocationDTO
@@ -23,7 +25,8 @@ class RiderLocationDTO
             $request->validated('rider_id'),
             $request->validated('service_name'),
             $request->validated('latitude'),
-            $request->validated('longitude')
+            $request->validated('longitude'),
+            $request->validated('timestamp')
         );
     }
 }

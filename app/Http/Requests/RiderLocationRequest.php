@@ -28,6 +28,7 @@ class RiderLocationRequest extends FormRequest
             'service_name' => 'required',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
+            'timestamp' => 'required|date'
         ];
     }
 }

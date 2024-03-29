@@ -19,8 +19,9 @@ class RiderLocationService
         $riderLocation = new RiderLocation();
         $riderLocation->rider_id = $riderLocationDTO->rider_id;
         $riderLocation->service_name = $riderLocationDTO->service_name;
-        $riderLocation->latitude = $riderLocationDTO->lat;
-        $riderLocation->longitude = $riderLocationDTO->long;
+        $riderLocation->latitude = $riderLocationDTO->latitude;
+        $riderLocation->longitude = $riderLocationDTO->longitude;
+        $riderLocation->timestamp = $riderLocationDTO->timestamp;
         $riderLocation->save();
 
         return $riderLocation;

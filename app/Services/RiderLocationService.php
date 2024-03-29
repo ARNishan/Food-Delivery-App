@@ -55,7 +55,7 @@ class RiderLocationService
             ];
         }
 
-        // Calculate distance (you may use a more precise formula for distance calculation)
+        // Calculate distance
         $distance = calculateDistance($nearestRider->latitude, $nearestRider->longitude, $restaurantLatitude, $restaurantLongitude);
 
         // Cache the result for future requests

@@ -2,56 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\RiderLocation;
-use App\Models\Restaurant;
-use Illuminate\Support\Facades\Redis;
+use App\Http\Requests\RiderLocationRequest;
+use App\Http\Requests\NearestRiderRequest;
+use App\Http\Resources\RiderLocationResource;
+use App\Services\RiderLocationService;
+use App\DTO\RiderLocationDTO;
 
 
 class RiderLocationController extends Controller
 {
-    public function store(Request $request)
+    protected $riderLocationService;
+
+    public function __construct(RiderLocationService $riderLocationService)
     {
-        $validatedData = $request->validate([
-            'rider_id' => 'required|exists:riders,id',
-            'service_name' => 'required',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-        ]);
-
-        RiderLocation::create($validatedData);
-
-        return response()->json(['message' => 'Rider location stored successfully'], 201);
+        $this->riderLocationService = $riderLocationService;
     }
 
-    public function findNearestRider(Request $request)
+    public function store(RiderLocationRequest $request)
     {
-        $validatedData = $request->validate([
-            'restaurant_id' => 'required|exists:restaurants,id',
-        ]);
-
-        // Retrieve the coordinates of the specified restaurant
-        $restaurant = Restaurant::find($validatedData['restaurant_id']);
-        $restaurantLatitude = $restaurant->latitude;
-        $restaurantLongitude = $restaurant->longitude;
-
-        // Find the nearest rider within the last 5 minutes
-        $nearestRider = RiderLocation::where('capture_time', '>=', now()->subMinutes(5))
-            ->orderByRaw('ABS(latitude - ' . $restaurantLatitude . ') + ABS(longitude - ' . $restaurantLongitude . ')')
-            ->first();
-
-        if (!$nearestRider) {
-            return response()->json(['message' => 'No riders found nearby'], 404);
-        }
-
-        // Calculate distance (you may use a more precise formula for distance calculation)
-        $distance = calculateDistance($nearestRider->latitude, $nearestRider->longitude, $restaurantLatitude, $restaurantLongitude);
-
-        return response()->json([
-            'rider_id' => $nearestRider->rider_id,
-            'distance' => $distance
-        ]);
+        $riderLocation = $this->riderLocationService->storeRiderLocation(RiderLocationDTO::fromApiRequest($request));
+        return new RiderLocationResource($riderLocation);
     }
 
-
+    public function findNearestRider(NearestRiderRequest $request)
+    {
+        $nearestRider = $this->riderLocationService->findNearestRider($request->validated('restaurant_id'));
+        return response()->json($nearestRider);
+    }
 }

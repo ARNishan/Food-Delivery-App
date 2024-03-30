@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Cache;
 use App\DTO\RiderLocationDTO;
 use App\Models\RiderLocation;
 use App\Models\Restaurant;
+use Illuminate\Support\Facades\Log;
 
 class RiderLocationService
 {

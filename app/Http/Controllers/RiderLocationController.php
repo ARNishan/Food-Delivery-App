@@ -7,6 +7,7 @@ use App\Http\Requests\NearestRiderRequest;
 use App\Http\Resources\RiderLocationResource;
 use App\Services\RiderLocationService;
 use App\DTO\RiderLocationDTO;
+use Illuminate\Support\Facades\Log;
 
 
 class RiderLocationController extends Controller

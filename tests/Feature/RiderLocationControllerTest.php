@@ -11,22 +11,19 @@ use App\Http\Requests\RiderLocationRequest;
 use App\Http\Requests\NearestRiderRequest;
 use App\Http\Resources\RiderLocationResource;
 use App\Models\Restaurant;
+use App\Models\RiderLocation;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 use App\Models\Rider;
-
+use Illuminate\Support\Facades\Log;
 class RiderLocationControllerTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
+
 
     /** @test */
     public function test_store_rider_location()
     {
-
-        $riderLocationServiceMock = $this->createMock(RiderLocationService::class);
-        $riderLocationServiceMock->expects($this->once())
-            ->method('storeRiderLocation')
-            ->willReturn(true);
 
         $rider = new Rider;
         $rider->name = 'Mr. A';
@@ -50,7 +47,8 @@ class RiderLocationControllerTest extends TestCase
         $validator = $this->app['validator']->make($requestData, $request->rules());
         $request->setValidator($validator);
 
-        $controller = new RiderLocationController($riderLocationServiceMock);
+        $services = new RiderLocationService;
+        $controller = new RiderLocationController($services);
         $response = $controller->store($request);
 
         $this->assertInstanceOf(RiderLocationResource::class, $response);
@@ -63,11 +61,6 @@ class RiderLocationControllerTest extends TestCase
 
     public function test_finds_nearest_rider()
     {
-        $riderLocationServiceMock = $this->createMock(RiderLocationService::class);
-        $riderLocationServiceMock->expects($this->once())
-            ->method('findNearestRider')
-            ->willReturn(true);
-
         $restaurant = new Restaurant;
         $restaurant->name = 'Test';
         $restaurant->latitude = 77.98490600;
@@ -82,11 +75,13 @@ class RiderLocationControllerTest extends TestCase
         $request->headers->set('Accept', 'application/json');
         $validator = $this->app['validator']->make($requestData, $request->rules());
         $request->setValidator($validator);
-
-        $controller = new RiderLocationController($riderLocationServiceMock);
+        $services = new RiderLocationService;
+        $controller = new RiderLocationController($services);
         $response = $controller->findNearestRider($request);
+        $responseData = json_decode($response->getContent(),true);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
+        $this->assertTrue('No riders found nearby' === $responseData['message'] || 'Rider found!' === $responseData['message']);
     }
 }

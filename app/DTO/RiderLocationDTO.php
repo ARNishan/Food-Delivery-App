@@ -1,6 +1,7 @@
 <?php
 namespace App\DTO;
 use App\Http\Requests\RiderLocationRequest;
+use Illuminate\Support\Facades\Log;
 
 class RiderLocationDTO
 {

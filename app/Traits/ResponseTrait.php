@@ -2,16 +2,72 @@
 
 namespace App\Traits;
 
-use Carbon\Carbon;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+
+/*
+|--------------------------------------------------------------------------
+| Api Responser Trait
+|--------------------------------------------------------------------------
+|
+| This trait will be used for any response we sent to clients.
+|
+*/
 
 trait ResponseTrait
 {
-    public function apiResponse($status_code,$message,$data){
-        $response['status_code'] = $status_code;
-        $response['message'] = $message;
-        $response['data'] = $data;
-        return response()->json($response,$status_code);
+    /**
+     * @param mixed $data
+     * @param string $message
+     * @param int $code
+     * @param array $other
+     *
+     * @return JsonResponse
+     */
+    protected function success($data, string $message = "Success", int $code = Response::HTTP_OK, array $other = []): JsonResponse
+    {
+        return response()->json([
+            'message' => $message,
+            'statusCode' => $code,
+        ] + $other + ['data' => $data ?? []]
+        , $code);
+    }
+
+    /**
+     * Return an error JSON response.
+     *
+     * @param string|null $message
+     * @param string|array|null $trace
+     * @param int $code
+     * @param array|null $data
+     * @return JsonResponse
+     */
+    protected function error(string $message = null, string | array $trace = null, int $code = Response::HTTP_INTERNAL_SERVER_ERROR, ?array $data = [])
+    {
+        return response()->json([
+            'status' => 'Error',
+            'statusCode' => $code,
+            'message' => $message,
+            'data' => $data,
+        ] + (in_array(strtolower(config('app.env')), ['test', 'local']) ?
+                ['trace' => $trace] : []
+            ), $code);
+    }
+
+    /**
+     * Return an error JSON response.
+     *
+     * @param string $message
+     * @param int $code
+     * @param array|null $data
+     * @return JsonResponse
+     */
+    protected function customError(string $message, int $code = Response::HTTP_FORBIDDEN, ?array $data = []): JsonResponse
+    {
+        return response()->json([
+                'status' => 'Error',
+                'message' => $message,
+                'data' => $data
+            ], $code);
     }
 }

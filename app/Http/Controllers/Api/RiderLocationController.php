@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\RiderLocationRequest;
 use App\Http\Requests\NearestRiderRequest;
-use App\Http\Resources\RiderLocationResource;
 use App\Services\RiderService;
-use App\DTO\RiderLocationDTO;
 use App\Http\Controllers\Controller;
 use App\Traits\ResponseTrait;
-
+use Symfony\Component\HttpFoundation\Response;
 
 class RiderLocationController extends Controller
 {
@@ -24,10 +22,14 @@ class RiderLocationController extends Controller
     public function store(RiderLocationRequest $request)
     {
         try{
-            $request->validated();
-            return $this->riderService->storeRiderLocation($request);
+            [$code, $message, $data]  = $this->riderService->storeRiderLocation($request->all());
+            if($code === Response::HTTP_OK){
+                return $this->success($data, $message, $code);
+            }
+            return $this->error($message, null, $code, $data);
+
         }catch(\Exception $e){
-            return $this->apiResponse(500, 'Something went wrong!', array());
+            return $this->error('Something went wrong!', $e->getTrace(), 500);
         }
 
     }
@@ -35,9 +37,14 @@ class RiderLocationController extends Controller
     public function findNearestRider(NearestRiderRequest $request)
     {
         try{
-            return $this->riderService->findNearestRider($request->validated('restaurant_id'));
+            [$code, $message, $data] = $this->riderService->findNearestRider($request->restaurant_id);
+            if($code === Response::HTTP_OK){
+                return $this->success($data, $message, $code);
+            }
+            return $this->error($message, null, $code, $data);
+
         }catch(\Exception $e){
-            return $this->apiResponse(500, 'Something went wrong!', array());
+            return $this->error('Something went wrong!', $e->getTrace(), 500);
         }
     }
 }

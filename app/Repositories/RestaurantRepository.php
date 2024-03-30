@@ -3,13 +3,20 @@
 namespace App\Repositories;
 
 use App\Models\Restaurant;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
 
 class RestaurantRepository
 {
+    protected Model $model;
+
+    public function __construct(Restaurant $model)
+    {
+        $this->model = $model;
+    }
+
     public function get($id)
     {
-        return Restaurant::findOrFail($id);
+        return $this->model::findOrFail($id);
     }
 
 

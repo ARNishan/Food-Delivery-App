@@ -5,29 +5,39 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\RiderLocationRequest;
 use App\Http\Requests\NearestRiderRequest;
 use App\Http\Resources\RiderLocationResource;
-use App\Services\RiderLocationService;
+use App\Services\RiderService;
 use App\DTO\RiderLocationDTO;
 use App\Http\Controllers\Controller;
+use App\Traits\ResponseTrait;
 
 
 class RiderLocationController extends Controller
 {
-    protected $riderLocationService;
+    use ResponseTrait;
+    protected $riderService;
 
-    public function __construct(RiderLocationService $riderLocationService)
+    public function __construct(RiderService $RiderService)
     {
-        $this->riderLocationService = $riderLocationService;
+        $this->riderService = $RiderService;
     }
 
     public function store(RiderLocationRequest $request)
     {
-        $riderLocation = $this->riderLocationService->storeRiderLocation(RiderLocationDTO::fromApiRequest($request));
-        return new RiderLocationResource($riderLocation);
+        try{
+            $request->validated();
+            return $this->riderService->storeRiderLocation($request);
+        }catch(\Exception $e){
+            return $this->apiResponse(500, 'Something went wrong!', array());
+        }
+
     }
 
     public function findNearestRider(NearestRiderRequest $request)
     {
-        $nearestRider = $this->riderLocationService->findNearestRider($request->validated('restaurant_id'));
-        return response()->json($nearestRider);
+        try{
+            return $this->riderService->findNearestRider($request->validated('restaurant_id'));
+        }catch(\Exception $e){
+            return $this->apiResponse(500, 'Something went wrong!', array());
+        }
     }
 }

@@ -3,15 +3,16 @@
 namespace Tests\Feature;
 
 use App\Http\Controllers\Api\RiderLocationController;
-use App\Services\RiderLocationService;
+use App\Services\RiderService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\RiderLocationRequest;
 use App\Http\Requests\NearestRiderRequest;
-use App\Http\Resources\RiderLocationResource;
 use App\Models\Restaurant;
 use Tests\TestCase;
 use App\Models\Rider;
+use App\Repositories\RiderLocationRepository;
+use App\Repositories\RestaurantRepository;
 use Illuminate\Support\Facades\Log;
 class RiderLocationControllerTest extends TestCase
 {
@@ -44,12 +45,12 @@ class RiderLocationControllerTest extends TestCase
         $validator = $this->app['validator']->make($requestData, $request->rules());
         $request->setValidator($validator);
 
-        $services = new RiderLocationService;
+        $services = new RiderService(new RestaurantRepository, new RiderLocationRepository);
         $controller = new RiderLocationController($services);
         $response = $controller->store($request);
 
-        $this->assertInstanceOf(RiderLocationResource::class, $response);
-        $responseData = $response->toArray($request);
+        $this->assertInstanceOf(JsonResponse::class, $response);
+        $responseData = json_decode($response->getContent(),true);
         $this->assertEquals('Rider location stored successfully',  $responseData['message']);
     }
 
@@ -72,7 +73,7 @@ class RiderLocationControllerTest extends TestCase
         $request->headers->set('Accept', 'application/json');
         $validator = $this->app['validator']->make($requestData, $request->rules());
         $request->setValidator($validator);
-        $services = new RiderLocationService;
+        $services = new RiderService(new RestaurantRepository, new RiderLocationRepository);
         $controller = new RiderLocationController($services);
         $response = $controller->findNearestRider($request);
         $responseData = json_decode($response->getContent(),true);

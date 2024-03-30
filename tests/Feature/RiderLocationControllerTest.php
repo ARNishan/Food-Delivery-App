@@ -2,17 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Http\Controllers\RiderLocationController;
+use App\Http\Controllers\Api\RiderLocationController;
 use App\Services\RiderLocationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Foundation\Testing\WithFaker;
 use App\Http\Requests\RiderLocationRequest;
 use App\Http\Requests\NearestRiderRequest;
 use App\Http\Resources\RiderLocationResource;
 use App\Models\Restaurant;
-use App\Models\RiderLocation;
-use Illuminate\Http\Request;
 use Tests\TestCase;
 use App\Models\Rider;
 use Illuminate\Support\Facades\Log;

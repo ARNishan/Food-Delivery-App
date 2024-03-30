@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\RiderLocationRequest;
 use App\Http\Requests\NearestRiderRequest;
 use App\Http\Resources\RiderLocationResource;
 use App\Services\RiderLocationService;
 use App\DTO\RiderLocationDTO;
-use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 
 class RiderLocationController extends Controller

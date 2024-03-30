@@ -1,4 +1,4 @@
-# ![Food delivery app]
+# Food delivery app
 
 # Getting started
 
@@ -42,14 +42,6 @@ Start the local development server
 
 You can now access the server at http://localhost:8000
 
-**TL;DR command list**
-
-    git clone git@github.com:gothinkster/laravel-realworld-example-app.git
-    cd laravel-realworld-example-app
-    composer install
-    cp .env.example .env
-    php artisan key:generate
-    php artisan jwt:generate 
     
 **Make sure you set the correct database connection information before running the migrations** [Environment variables](#environment-variables)
 
@@ -66,49 +58,27 @@ Run the database seeder and you're done
 
     php artisan migrate:refresh
     
+# Testing
 
-## API Specification
-
-This application adheres to the api specifications set by the [Thinkster](https://github.com/gothinkster) team. This helps mix and match any backend with any other frontend without conflicts.
-
-> [Full API Spec](https://github.com/gothinkster/realworld/tree/master/api)
-
-More information regarding the project can be found here https://github.com/gothinkster/realworld
-
-----------
-
-# Code overview
-
-## Dependencies
-
-- [jwt-auth](https://github.com/tymondesigns/jwt-auth) - For authentication using JSON Web Tokens
-- [laravel-cors](https://github.com/barryvdh/laravel-cors) - For handling Cross-Origin Resource Sharing (CORS)
+    php artisan test
 
 ## Folders
 
 - `app` - Contains all the Eloquent models
 - `app/Http/Controllers/Api` - Contains all the api controllers
-- `app/Http/Middleware` - Contains the JWT auth middleware
-- `app/Http/Requests/Api` - Contains all the api form requests
-- `app/RealWorld/Favorite` - Contains the files implementing the favorite feature
-- `app/RealWorld/Filters` - Contains the query filters used for filtering api requests
-- `app/RealWorld/Follow` - Contains the files implementing the follow feature
-- `app/RealWorld/Paginate` - Contains the pagination class used to paginate the result
-- `app/RealWorld/Slug` - Contains the files implementing slugs to articles
-- `app/RealWorld/Transformers` - Contains all the data transformers
+- `app/Http/Middleware` - Contains the middleware
+- `app/Http/Requests` - Contains all the requests
 - `config` - Contains all the application configuration files
 - `database/factories` - Contains the model factory for all the models
 - `database/migrations` - Contains all the database migrations
 - `database/seeds` - Contains the database seeder
 - `routes` - Contains all the api routes defined in api.php file
 - `tests` - Contains all the application tests
-- `tests/Feature/Api` - Contains all the api tests
+- `tests/Feature` - Contains all the api tests
 
 ## Environment variables
 
 - `.env` - Environment variables can be set in this file
-
-***Note*** : You can quickly set the database information and other variables in this file and have the application fully working.
 
 ----------
 
@@ -142,11 +112,3 @@ This applications uses JSON Web Token (JWT) to handle authentication. The token 
 - https://self-issued.info/docs/draft-ietf-oauth-json-web-token.html
 
 ----------
-
-# Cross-Origin Resource Sharing (CORS)
- 
-This applications has CORS enabled by default on all API endpoints. The default configuration allows requests from `http://localhost:3000` and `http://localhost:4200` to help speed up your frontend testing. The CORS allowed origins can be changed by setting them in the config file. Please check the following sources to learn more about CORS.
- 
-- https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
-- https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
-- https://www.w3.org/TR/cors

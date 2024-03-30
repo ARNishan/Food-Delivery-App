@@ -4,10 +4,8 @@
 
 ## Installation
 
-Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/5.4/installation#installation)
-
-Alternative installation is possible without local dependencies relying on [Docker](#docker). 
-
+Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/9.x)
+ 
 Clone the repository
 
     git clone https://gitlab.com/Abdur_Rahim/food-delivery-app.git

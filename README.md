@@ -8,7 +8,7 @@ Please check the official laravel installation guide for server requirements bef
  
 Clone the repository
 
-    git clone https://gitlab.com/Abdur_Rahim/food-delivery-app.git
+    git clone https://github.com/ARNishan/Food-Delivery-App.git
 
 Switch to the repo folder
 
@@ -25,10 +25,6 @@ Copy the example env file and make the required configuration changes in the .en
 Generate a new application key
 
     php artisan key:generate
-
-Generate a new JWT authentication secret key
-
-    php artisan jwt:generate
 
 Run the database migrations (**Set the database connection in .env before migrating**)
 
@@ -90,5 +86,10 @@ The api can now be accessed at
 
     http://localhost:8000/api
 
+Request headers
 
+| **Required** 	| **Key**              	| **Value**            	|
+|----------	|------------------	|------------------	|
+| Yes      	| Content-Type     	| application/json 	|
+| Yes      	| Accept        	| application/json	|
 ----------
